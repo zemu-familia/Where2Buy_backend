@@ -36,13 +36,18 @@ if(/*isset($_POST['requestID'] )*/true){
 					distance_in_km <= a.areaCenterRadius
 				ORDER BY
 					distance_in_km ASC";
+					
 	$result = mysqli_query($conn, $query);
 	
 	if($result){ // If query succeeds
 		if(mysqli_num_rows($result) > 0){ // If there are results	
-			statusCodeJSON(600, "Query successful. Results found.");
+			$jsonArray = array();
+			$resultsArray = array();
+			
+			$jsonArray["status"] = array("statusCode" => 600, "statusMessage" => "Query successful. Results found.");
+			//statusCodeJSON(600, "Query successful. Results found.");
 			while($row = mysqli_fetch_assoc($result)){
-				echo json_encode(array(
+				array_push($resultsArray, array(
 					"requestID" => $row['requestID'],
 					"requesterName" => $row['displayName'],
 					"itemName" => $row['itemName'],
@@ -51,6 +56,9 @@ if(/*isset($_POST['requestID'] )*/true){
 					"requestDate" => $row['requestDate'],
 				));
 			}
+			$jsonArray["result"] = $resultsArray;
+			
+			echo json_encode($jsonArray);
 		}else{ // If there are no results
 			statusCodeJSON(601, "Query successful. No requests found nearby.");
 		}
