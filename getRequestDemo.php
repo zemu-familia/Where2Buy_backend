@@ -21,6 +21,7 @@ if(/*isset($_POST['requestID'] )*/true){
 				b.displayName, 
 				itemName, 
 				requestDate, 
+				areaCenterRadius, 
 				111.111 
 					* DEGREES(ACOS(LEAST(1.0, COS(RADIANS(a.areaCenterLat)) 
 					* COS(RADIANS($responderLat)) 
@@ -32,7 +33,7 @@ if(/*isset($_POST['requestID'] )*/true){
 				INNER JOIN USER b 
 					ON a.requesterUserID = b.userID 
 				HAVING
-					distance_in_km <= 10
+					distance_in_km <= a.areaCenterRadius
 				ORDER BY
 					distance_in_km ASC";
 	$result = mysqli_query($conn, $query);
