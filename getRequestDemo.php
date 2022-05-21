@@ -2,14 +2,16 @@
 
 require_once('db.php');
 
-function statusCodeJSON($fStatusCode, $fStatusMsg){
-	echo json_encode(array(
+// TO-DO: some form of login validation probably? instead of if(true)
+
+
+function statusCodeJSON(&$fJsonArray, $fStatusCode, $fStatusMsg){
+	$fJsonArray["status"] = array(
 		"statusCode" => $fStatusCode,
 		"statusMessage" => $fStatusMsg
-	));
+	);
 }
 
-// TO-DO: some form of login validation probably? instead of if(true)
 if(/*isset($_POST['requestID'] )*/true){
 	$googleID = filter_input(INPUT_POST, 'googleID', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 	$responderLat = filter_input(INPUT_POST, 'responderLat', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
@@ -38,14 +40,13 @@ if(/*isset($_POST['requestID'] )*/true){
 					distance_in_km ASC";
 					
 	$result = mysqli_query($conn, $query);
-	
+	$jsonArray = array();
 	if($result){ // If query succeeds
 		if(mysqli_num_rows($result) > 0){ // If there are results	
-			$jsonArray = array();
 			$resultsArray = array();
 			
-			$jsonArray["status"] = array("statusCode" => 600, "statusMessage" => "Query successful. Results found.");
-			//statusCodeJSON(600, "Query successful. Results found.");
+			//$jsonArray["status"] = array("statusCode" => 600, "statusMessage" => "Query successful. Results found.");
+			statusCodeJSON($jsonArray, 600, "Query successful. Results found.");
 			while($row = mysqli_fetch_assoc($result)){
 				array_push($resultsArray, array(
 					"requestID" => $row['requestID'],
@@ -58,14 +59,14 @@ if(/*isset($_POST['requestID'] )*/true){
 			}
 			$jsonArray["result"] = $resultsArray;
 			
-			echo json_encode($jsonArray);
 		}else{ // If there are no results
-			statusCodeJSON(601, "Query successful. No requests found nearby.");
+			statusCodeJSON($jsonArray, 601, "Query successful. No requests found nearby.");
 		}
 	}else{
-		statusCodeJSON(610, "Query failed." . mysqli_error($conn));
+		statusCodeJSON($jsonArray, 610, "Query failed." . mysqli_error($conn));
 	}
 }else{ 
-	statusCodeJSON(401, "An error occurred");
+	statusCodeJSON($jsonArray, 401, "An error occurred");
 }
+echo json_encode($jsonArray);
 ?>
