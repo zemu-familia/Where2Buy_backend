@@ -1,19 +1,12 @@
 <?php
 
 require_once('db.php');
-
+require_once('functions.php');
 // TO-DO: some form of login validation probably? instead of if(true)
-
-
-function statusCodeJSON(&$fJsonArray, $fStatusCode, $fStatusMsg){
-	$fJsonArray["status"] = array(
-		"statusCode" => $fStatusCode,
-		"statusMessage" => $fStatusMsg
-	);
-}
-
+	
+$jsonArray = array();
 if(/*isset($_POST['requestID'] )*/true){
-	$googleID = filter_input(INPUT_POST, 'googleID', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+	$googleID = filter_input(INPUT_POST, 'googleID', FILTER_SANITIZE_NUMBER_INT);
 	$responderLat = filter_input(INPUT_POST, 'responderLat', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 	$responderLng = filter_input(INPUT_POST, 'responderLng', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 
@@ -40,7 +33,7 @@ if(/*isset($_POST['requestID'] )*/true){
 					distance_in_km ASC";
 					
 	$result = mysqli_query($conn, $query);
-	$jsonArray = array();
+	
 	if($result){ // If query succeeds
 		if(mysqli_num_rows($result) > 0){ // If there are results	
 			$resultsArray = array();
