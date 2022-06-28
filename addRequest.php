@@ -7,11 +7,11 @@ if(true){
   $requesterID = filter_input(INPUT_POST, 'requesterID', FILTER_SANITIZE_NUMBER_INT);
   $requesterLat = filter_input(INPUT_POST, 'requesterLat', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
   $requesterLng = filter_input(INPUT_POST, 'requesterLng', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-  $itemName = mysqli_real_escape_string($conn, filter_input(INPUT_POST, 'itemName', FILTER_SANITIZE_STRING));
+  $itemName = ucwords(mysqli_real_escape_string($conn, filter_input(INPUT_POST, 'itemName', FILTER_SANITIZE_STRING)));
   $areaRadius = filter_input(INPUT_POST, 'areaRadius', FILTER_SANITIZE_NUMBER_INT);
 
 
-  $query = "INSERT INTO REQUEST(requesterUserID, itemName, areaCenterRadius, areaCenterLat, areaCenterLng, requestDate) VALUES('$requesterID', '$itemName', '$areaRadius', '$requesterLat', '$requesterLng', CURRENT_DATE)";
+  $query = "INSERT INTO REQUEST(requesterUserID, itemName, areaCenterRadius, areaCenterLat, areaCenterLng, requestDate) VALUES('$requesterID', '$itemName', '$areaRadius', '$requesterLat', '$requesterLng', CURRENT_TIMESTAMP)";
 
   $result = mysqli_query($conn, $query);
   if($result){ // If query succeeds
