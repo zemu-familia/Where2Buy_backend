@@ -10,7 +10,7 @@ if(/*isset($_POST['requestID'] )*/true){
 	$responderID = filter_input(INPUT_POST, 'responderID', FILTER_SANITIZE_NUMBER_INT);
 	$storeLat = filter_input(INPUT_POST, 'storeLat', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 	$storeLng = filter_input(INPUT_POST, 'storeLng', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-	$storeName = mysqli_real_escape_string($conn, filter_input(INPUT_POST, 'storeName', FILTER_SANITIZE_STRING));
+	$storeName = ucwords(mysqli_real_escape_string($conn, filter_input(INPUT_POST, 'storeName', FILTER_SANITIZE_STRING)));
 
 	$query = "INSERT INTO LISTING(RequestID, responderUserID, storeName, storeLocationLat, storeLocationLng)
 				VALUES($requestID, '$responderID', '$storeName', $storeLat, $storeLng)";
